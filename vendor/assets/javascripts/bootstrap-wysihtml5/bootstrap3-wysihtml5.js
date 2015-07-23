@@ -1,4 +1,9 @@
 /* jshint expr: true */
+
+// JMS-JO. Ug, defaultOptions gets deep merged *whether or not we want it to*
+// in Wysihtml5.new.  So we will remove all of the parse tags and provide them
+// explicitly in the app.
+
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
@@ -20,6 +25,7 @@ var bsWysihtml5 = function($, wysihtml5) {
 
   var Wysihtml5 = function(el, options) {
     this.el = el;
+
     var toolbarOpts = $.extend(true, {}, defaultOptions, options);
     for(var t in toolbarOpts.customTemplates) {
       wysihtml5.tpl[t] = toolbarOpts.customTemplates[t];
@@ -47,16 +53,16 @@ var bsWysihtml5 = function($, wysihtml5) {
       if(editor.composer.editableArea.contentDocument) {
         this.addMoreShortcuts(editor, editor.composer.editableArea.contentDocument.body || editor.composer.editableArea.contentDocument, options.shortcuts);
       } else {
-        this.addMoreShortcuts(editor, editor.composer.editableArea, options.shortcuts);    
+        this.addMoreShortcuts(editor, editor.composer.editableArea, options.shortcuts);
       }
-      
+
 
       if(options && options.events) {
         for(var eventName in options.events) {
           editor.on(eventName, options.events[eventName]);
         }
       }
-      
+
       editor.on('beforeload', this.syncBootstrapDialogEvents);
       //syncBootstrapDialogEvents();
       return editor;
@@ -189,7 +195,7 @@ var bsWysihtml5 = function($, wysihtml5) {
       return methods.init.apply( this, arguments );
     } else {
       $.error( 'Method ' +  method + ' does not exist on jQuery.wysihtml5' );
-    }    
+    }
   };
 
   $.fn.wysihtml5.Constructor = Wysihtml5;
@@ -226,7 +232,7 @@ var bsWysihtml5 = function($, wysihtml5) {
         'wysiwyg-color-teal' : 1,
         'wysiwyg-color-aqua' : 1,
         'wysiwyg-color-orange' : 1
-      },
+      } /*, // see comment at top
       tags: {
         'b':  {},
         'i':  {},
@@ -269,12 +275,13 @@ var bsWysihtml5 = function($, wysihtml5) {
         'code': 1,
         'pre': 1
       }
+      */
     },
     locale: 'en',
     shortcuts: {
       '83': 'small'     // S
     }
-    
+
   };
 
   if (typeof $.fn.wysihtml5.defaultOptionsCache === 'undefined') {
